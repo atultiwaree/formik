@@ -1,31 +1,31 @@
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const App = () => {
-  const validate = (values) => {
-    const errors = {};
+  //   const validate = (values) => {
+  //     const errors = {};
 
-    if (!values.firstName) {
-      errors.firstName = "First name required";
-    } else if (values.firstName.length > 15) {
-      errors.firstName = "Letters must be 15 character or less";
-    }
+  //     if (!values.firstName) {
+  //       errors.firstName = "First name required";
+  //     } else if (values.firstName.length > 15) {
+  //       errors.firstName = "Letters must be 15 character or less";
+  //     }
 
-    if (!values.lastName) {
-      errors.lastName = "Last name required";
-    } else if (values.lastName.length > 10) {
-      errors.lastName = "Letter must be less than 10 letters";
-    }
+  //     if (!values.lastName) {
+  //       errors.lastName = "Last name required";
+  //     } else if (values.lastName.length > 10) {
+  //       errors.lastName = "Letter must be less than 10 letters";
+  //     }
 
-    if (!values.email) {
-      errors.email = "Required";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-      errors.email = "Invalid email address";
-    }
-
-    return errors;
-  };
+  //     if (!values.email) {
+  //       errors.email = "Required";
+  //     } else if (
+  //       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+  //     ) {
+  //       errors.email = "Invalid email address";
+  //     }
+  //     return errors;
+  //   };
 
   const formik = useFormik({
     initialValues: {
@@ -33,7 +33,15 @@ const App = () => {
       lastName: "",
       email: "",
     },
-    validate,
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .max(15, "First name must be 15 character or less")
+        .required("Required"),
+      lastName: Yup.string()
+        .max(15, "Last name must be 15 characters or less")
+        .required("Required"),
+      email: Yup.string().email("Email must be valid").required("Required"),
+    }),
     onSubmit: function (x) {
       console.log(JSON.stringify(x, null, 2));
     },
